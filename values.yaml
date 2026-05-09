@@ -1,0 +1,23 @@
+image:
+  repository: ghcr.io/thephaseless/byparr
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  main:
+    controller: main
+    ports:
+      main:
+        port: 8191
+        protocol: http
+        targetPort: 8191
+
+workload:
+  main:
+    enabled: true
+    podSpec:
+      containers:
+        main:
+          enabled: true
+          primary: true
+          imageSelector: image

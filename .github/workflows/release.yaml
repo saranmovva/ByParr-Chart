@@ -1,0 +1,71 @@
+name: Release and Publish Helm Chart
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Read current version
+        id: version
+        run: |
+          CURRENT_VERSION=$(grep '^version:' Chart.yaml | awk '{print $2}')
+          echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+          NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))"
+
+          echo "new=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update Chart.yaml version
+        run: |
+          sed -i "s/^version:.*/version: ${{ steps.version.outputs.new }}/" Chart.yaml
+
+      - name: Update dependencies
+        run: helm dependency update .
+
+      - name: Lint chart
+        run: helm lint .
+
+      - name: Package chart
+        run: helm package .
+
+      - name: Commit version bump + tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add Chart.yaml Chart.lock
+          git commit -m "release: v${{ steps.version.outputs.new }} [skip ci]"
+          git tag "v${{ steps.version.outputs.new }}"
+
+          git push origin master
+          git push origin "v${{ steps.version.outputs.new }}"
+
+      - name: Login to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | \
+          helm registry login ghcr.io \
+          -u ${{ github.actor }} \
+          --password-stdin
+
+      - name: Push to GHCR (OCI)
+        run: |
+          helm push byparr-${{ steps.version.outputs.new }}.tgz \
+          oci://ghcr.io/${{ github.repository_owner }}/charts
