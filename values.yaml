@@ -12,6 +12,31 @@ service:
         protocol: http
         targetPort: 8191
 
+ingress:
+  main:
+    enabled: false
+    ingressClassName: ""
+    hosts:
+      - host: byparr.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+    # tls:
+    #   - hosts:
+    #       - byparr.example.com
+    #     secretName: byparr-tls
+    targetSelector:
+      main: main
+    integrations:
+      traefik:
+        enabled: false
+      nginx:
+        enabled: false
+      certManager:
+        enabled: false
+        # certificateIssuer: ""
+
 workload:
   main:
     enabled: true

@@ -57,11 +57,69 @@ The following table lists the key configurable parameters.
 | `image.tag` | Image tag | `latest` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `service.main.ports.main.port` | Service port | `8191` |
+| `ingress.main.enabled` | Enable ingress | `false` |
+| `ingress.main.ingressClassName` | Ingress class name | `""` |
+| `ingress.main.hosts[0].host` | Hostname | `byparr.example.com` |
+| `ingress.main.tls` | TLS configuration | `[]` |
+| `ingress.main.integrations.traefik.enabled` | Enable Traefik integration | `false` |
+| `ingress.main.integrations.nginx.enabled` | Enable NGINX integration | `false` |
+| `ingress.main.integrations.certManager.enabled` | Enable cert-manager integration | `false` |
 
 To see all available values:
 
 ```sh
 helm show values oci://ghcr.io/saranmovva/charts/byparr
+```
+
+## Ingress
+
+Ingress is disabled by default. To enable it, override the following in your values file:
+
+```yaml
+ingress:
+  main:
+    enabled: true
+    ingressClassName: "nginx"  # or "traefik", etc.
+    hosts:
+      - host: byparr.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - byparr.example.com
+        secretName: byparr-tls
+```
+
+### With cert-manager
+
+```yaml
+ingress:
+  main:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - host: byparr.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    integrations:
+      certManager:
+        enabled: true
+        certificateIssuer: letsencrypt-prod
+```
+
+### With Traefik
+
+```yaml
+ingress:
+  main:
+    enabled: true
+    hosts:
+      - host: byparr.example.com
+    integrations:
+      traefik:
+        enabled: true
 ```
 
 ## Usage with *arr apps
