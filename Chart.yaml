@@ -2,7 +2,7 @@ apiVersion: v2
 name: byparr
 description: Byparr Helm Chart - FlareSolverr drop-in replacement using Camoufox
 type: application
-version: 0.1.2
+version: 0.1.3
 appVersion: "latest"
 home: https://github.com/ThePhaseless/Byparr
 sources:
