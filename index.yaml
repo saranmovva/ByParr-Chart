@@ -3,6 +3,26 @@ entries:
   byparr:
   - apiVersion: v2
     appVersion: latest
+    created: "2026-05-12T21:22:39.780032204Z"
+    dependencies:
+    - name: common
+      repository: oci://oci.trueforge.org/truecharts
+      version: 29.1.7
+    description: Byparr Helm Chart - FlareSolverr drop-in replacement using Camoufox
+    digest: f5861ca715799dbe580dcd658c56eecb7f18e93de505461e394763e6f8dfe9a9
+    home: https://github.com/ThePhaseless/Byparr
+    maintainers:
+    - email: saranmovva@gmail.com
+      name: Saran
+    name: byparr
+    sources:
+    - https://github.com/ThePhaseless/Byparr
+    type: application
+    urls:
+    - https://github.com/saranmovva/ByParr-Chart/releases/download/byparr-0.1.5/byparr-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v2
+    appVersion: latest
     created: "2026-05-12T21:14:34.582401491Z"
     dependencies:
     - name: common
@@ -41,4 +61,4 @@ entries:
     urls:
     - https://github.com/saranmovva/ByParr-Chart/releases/download/byparr-0.1.3/byparr-0.1.3.tgz
     version: 0.1.3
-generated: "2026-05-12T21:14:34.582432088Z"
+generated: "2026-05-12T21:22:39.780044677Z"
