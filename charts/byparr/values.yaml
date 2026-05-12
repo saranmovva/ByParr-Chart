@@ -51,3 +51,5 @@ workload:
           enabled: true
           primary: true
           imageSelector: image
+          env:
+            UV_NO_CACHE: "1"
