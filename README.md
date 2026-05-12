@@ -5,46 +5,63 @@ Helm chart for [Byparr](https://github.com/ThePhaseless/Byparr) — a drop-in re
 ## Prerequisites
 
 - Kubernetes 1.21+
-- Helm 3.8+ (OCI registry support required)
+- Helm 3.8+
 
 ## Installation
 
-### Add and install from OCI registry
+### Add the Helm repository
 
 ```sh
-helm install byparr oci://ghcr.io/saranmovva/charts/byparr
+helm repo add byparr https://saranmovva.github.io/ByParr-Chart
+helm repo update
+```
+
+### Install the chart
+
+```sh
+helm install byparr byparr/byparr
 ```
 
 ### Install a specific version
 
 ```sh
-helm install byparr oci://ghcr.io/saranmovva/charts/byparr --version 0.1.1
+helm install byparr byparr/byparr --version 0.1.3
 ```
 
 ### Install with custom values
 
 ```sh
-helm install byparr oci://ghcr.io/saranmovva/charts/byparr -f values.yaml
+helm install byparr byparr/byparr -f values.yaml
 ```
 
 ## Pulling the chart
 
 ```sh
-helm pull oci://ghcr.io/saranmovva/charts/byparr
+helm pull byparr/byparr
 # or pull and untar a specific version
-helm pull oci://ghcr.io/saranmovva/charts/byparr --version 0.1.1 --untar
+helm pull byparr/byparr --version 0.1.3 --untar
 ```
 
 ## Upgrading
 
 ```sh
-helm upgrade byparr oci://ghcr.io/saranmovva/charts/byparr
+helm repo update
+helm upgrade byparr byparr/byparr
 ```
 
 ## Uninstalling
 
 ```sh
 helm uninstall byparr
+```
+
+## ArgoCD
+
+```yaml
+sources:
+  - repoURL: https://saranmovva.github.io/ByParr-Chart
+    chart: byparr
+    targetRevision: 0.1.3
 ```
 
 ## Configuration
@@ -68,7 +85,7 @@ The following table lists the key configurable parameters.
 To see all available values:
 
 ```sh
-helm show values oci://ghcr.io/saranmovva/charts/byparr
+helm show values byparr/byparr
 ```
 
 ## Ingress
